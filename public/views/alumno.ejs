@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Boletín Digital - Inicio</title>
+    <!-- Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="/estilos/index.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+</head>
+<body class="bg-gray-100 font-roboto">
+    <!-- Contenedor principal -->
+    <div class="flex flex-col min-h-screen">
+        <!-- Contenido principal -->
+        <div class="flex flex-1">
+            <!-- Sidebar -->
+            <aside class="hidden lg:block w-1/4 bg-red-700 text-white flex flex-col items-center py-8">
+                <img src="../img/guevara2.png" alt="Logo del Colegio" class="w-32 h-32 mb-4 rounded-full">
+                <h2 class="text-2xl font-semibold mb-6">Portal del Alumno</h2>
+                <nav class="w-full">
+                    <ul class="space-y-2">
+                        <li>
+                            <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('notas')">
+                                <i class="fas fa-file-alt mr-2"></i> Mis Notas
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+                
+            </aside>
+            <!-- Sección principal -->
+            <div class="w-full lg:w-3/4">
+                <!-- Header móvil -->
+                <header class="bg-red-700 text-white lg:hidden">
+                    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-bold">Portal del Alumno</h1>
+                        </div>
+                        <button id="menuButton" class="focus:outline-none">
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
+                    </div>
+                    <!-- Menú móvil -->
+                    <nav id="mobileMenu" class="hidden">
+                        <ul>
+                            <li>
+                                <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('notas')">
+                                    <i class="fas fa-file-alt mr-2"></i> Mis Notas
+                                </button>
+                            </li>
+                            
+                        </ul>
+                    </nav>
+                </header>
+                <!-- Contenido -->
+                <main class="container mx-auto px-4 py-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-red-700">Bienvenido, <%= user.apellido_nombre %></h1>
+                    </div>
+                    <!-- Sección Notas -->
+                    <div id="notas" class="seccion">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="fas fa-file-alt mr-2"></i>Mis Notas</h2>
+                        <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
+                            <table id="tablaNotas" class="min-w-full">
+                                <thead class="bg-red-700 text-white">
+                                    <tr>
+                                        <th class="px-4 py-2 border-b">Materia</th>
+                                        <th class="px-4 py-2 border-b">Informe1 C1</th>
+                                        <th class="px-4 py-2 border-b">Informe2 C1</th>
+                                        <th class="px-4 py-2 border-b">Nota C1</th>
+                                        <th class="px-4 py-2 border-b">Informe1 C2</th>
+                                        <th class="px-4 py-2 border-b">Informe2 C2</th>
+                                        <th class="px-4 py-2 border-b">Nota C2</th>
+                                        <th class="px-4 py-2 border-b">Nota Anual</th>
+                                        <th class="px-4 py-2 border-b">Nota Dic</th>
+                                        <th class="px-4 py-2 border-b">Nota Feb</th>
+                                        <th class="px-4 py-2 border-b">Nota Final</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (notas && notas.length > 0) { %>
+                                        <% notas.forEach(function(nota) { %>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="px-4 py-2 border-b"><%= nota.Materia %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Informe1_C1 %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Informe2_C1 %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Nota_C1 %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Informe1_C2 %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Informe2_C2 %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Nota_C2 %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Nota_Anual %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Nota_Dic %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Nota_Feb %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= nota.Nota_Final %></td>
+                                        </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="11" class="px-4 py-2 border-b text-center">No hay notas disponibles.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button id="exportarPDF" class="mt-6 px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800">
+                            <i class="fas fa-file-pdf mr-2"></i>Exportar a PDF
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <!-- Babel (para poder usar JSX en el navegador) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Script de React -->
+    <script type="text/babel">
+        function MensajeReact() {
+            return (
+                <div className="text-center">
+                    <h4 className="text-xl font-semibold mb-2">¡Hola desde React!</h4>
+                    <p className="text-gray-700">
+                        Este mensaje ha sido renderizado utilizando un componente React integrado en una página EJS.
+                    </p>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<MensajeReact />, document.getElementById('react-root'));
+    </script>
+        
+        <footer class="bg-gray-800 text-white py-4">
+            <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
+                <div class="flex items-center mb-4 lg:mb-0">
+                    <img src="../img/empresa.png" alt="Brain Tech Logo" class="w-10 h-10 mr-2">
+                    <span>Desarrollado por Brain Tech SAS</span>
+                </div>
+                <div class="text-sm">
+                    &copy; Todos los derechos reservados.
+                </div>
+            </div>
+        </footer>
+        <!-- Scripts -->
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <!-- jsPDF -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+        <!-- jsPDF AutoTable -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+        <!-- Font Awesome -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function() {
+                $('#tablaNotas').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json'
+                    },
+                    paging: false,
+                    info: false,
+                    searching: false
+                });
+            });
+            // Función para mostrar la sección (aunque solo tenemos una)
+            function mostrarSeccion(seccion) {
+                // Si en el futuro hay más secciones, podemos manejarlas aquí
+            }
+            // Función para mostrar/ocultar el menú móvil
+            document.getElementById('menuButton').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            });
+            // Función para exportar a PDF
+            document.getElementById("exportarPDF").addEventListener("click", () => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const table = document.getElementById("tablaNotas");
+
+                doc.text(`Notas de ${"<%= user.apellido_nombre %>"}`, 14, 15);
+
+                // Obtener los datos de la tabla
+                const data = [];
+                const headers = [];
+
+                // Obtener los encabezados
+                table.querySelectorAll("thead tr th").forEach(th => {
+                    headers.push(th.textContent.trim());
+                });
+
+                // Obtener las filas
+                table.querySelectorAll("tbody tr").forEach(tr => {
+                    const rowData = [];
+                    tr.querySelectorAll("td").forEach(td => {
+                        rowData.push(td.textContent.trim());
+                    });
+                    data.push(rowData);
+                });
+
+                // Generar la tabla en el PDF
+                doc.autoTable({
+                    head: [headers],
+                    body: data,
+                    startY: 20,
+                    styles: { fontSize: 8 },
+                    headStyles: { fillColor: [192, 0, 0] }, // Color rojo
+                    margin: { left: 14, right: 14 }
+                });
+
+                doc.save("notas_alumno.pdf");
+            });
+        </script>
+    </body>
+</html>

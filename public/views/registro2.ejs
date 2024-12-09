@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Cuenta - Colegio Provincial Dr. Ernesto Guevara</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- SweetAlert para Registro Exitoso -->
+    <% if (typeof success !== 'undefined' && success) { %>
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Registro exitoso',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(function() {
+                window.location.href = 'iniciar.ejs';
+            });
+        </script>
+    <% } %>
+
+    <!-- SweetAlert para Errores -->
+    <% if (typeof error !== 'undefined') { %>
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: '<%= error %>',
+                showConfirmButton: true
+            });
+        </script>
+    <% } %>
+
+    <div class="max-w-4xl mx-auto font-[sans-serif] p-6">
+        <div class="text-center mb-16">
+            <a href="/">
+                <img src="/img/guevara2.png" alt="Imagen del colegio" class="w-52 mx-auto" />
+            </a>
+            <h4 class="text-gray-800 text-base font-semibold mt-6">Crear una nueva cuenta (Alumnado)</h4>
+        </div>
+
+        <!-- Formulario para registro en "alumnado" -->
+        <form method="post" action="/carga_alumnado">
+            <div id="register-form" class="grid sm:grid-cols-2 gap-8">
+                <div>
+                    <label class="text-gray-800 text-sm mb-2 block">Nombre Completo</label>
+                    <input name="apellido_nombre" type="text" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-white outline-blue-500 transition-all" placeholder="Ingresa tu nombre completo" required />
+                </div>
+                <div>
+                    <label class="text-gray-800 text-sm mb-2 block">Dirección</label>
+                    <input name="direccion" type="text" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-white outline-blue-500 transition-all" placeholder="Ingresa tu dirección" required />
+                </div>
+                <div>
+                    <label class="text-gray-800 text-sm mb-2 block">Celular</label>
+                    <input name="celular" type="text" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-white outline-blue-500 transition-all" placeholder="Ingresa tu número de celular" required />
+                </div>
+                <div>
+                    <label class="text-gray-800 text-sm mb-2 block">DNI</label>
+                    <input name="dni" type="text" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-white outline-blue-500 transition-all" placeholder="Ingresa tu DNI" required />
+                </div>
+                <div>
+                    <label class="text-gray-800 text-sm mb-2 block">Email</label>
+                    <input name="email" type="email" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-white outline-blue-500 transition-all" placeholder="Ingresa tu email" required />
+                </div>
+                <div>
+                    <label class="text-gray-800 text-sm mb-2 block">Contraseña</label>
+                    <input name="password" type="password" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-white outline-blue-500 transition-all" placeholder="Ingresa tu contraseña" required />
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <button type="submit" class="py-3.5 px-7 text-sm font-semibold tracking-wider rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                    Crear Cuenta
+                </button>
+            </div>
+        </form>
+
+        <div class="text-center mt-6">
+            <a href="iniciar.ejs" class="text-blue-600 hover:underline">Iniciar Sesión</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Departamento de Alumnado</title>
+    <!-- Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="/estilos/admin.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botón para cargar notas
+            document.getElementById('cargarNotas').addEventListener('click', function() {
+                const alumnoId = document.getElementById('id_alumno_editar').value;
+                const materiaId = document.getElementById('id_materia_editar').value;
+        
+                if (!alumnoId || !materiaId) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Seleccione un alumno y una materia para cargar las notas.'
+                    });
+                    return;
+                }
+        
+                fetch(`/obtenerNotas?id_alumno=${alumnoId}&id_materia=${materiaId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const formulario = document.getElementById('notasFormulario');
+                            formulario.classList.remove('hidden');
+                            document.getElementById('guardarNotas').classList.remove('hidden');
+        
+                            // Cargar los valores en los campos
+                            formulario.querySelector('input[name="informe1_cuatrimestre1"]').value = data.notas.informe1_cuatrimestre1 || '';
+                            formulario.querySelector('input[name="informe2_cuatrimestre1"]').value = data.notas.informe2_cuatrimestre1 || '';
+                            formulario.querySelector('input[name="nota_cuatrimestre1"]').value = data.notas.nota_cuatrimestre1 || '';
+                            formulario.querySelector('input[name="informe1_cuatrimestre2"]').value = data.notas.informe1_cuatrimestre2 || '';
+                            formulario.querySelector('input[name="informe2_cuatrimestre2"]').value = data.notas.informe2_cuatrimestre2 || '';
+                            formulario.querySelector('input[name="nota_cuatrimestre2"]').value = data.notas.nota_cuatrimestre2 || '';
+                            formulario.querySelector('input[name="nota_anual"]').value = data.notas.nota_anual || '';
+                            formulario.querySelector('input[name="nota_final"]').value = data.notas.nota_final || '';
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'No se pudieron cargar las notas.'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error al cargar las notas.'
+                        });
+                    });
+            });
+        });
+        </script>
+        
+
+</head>
+<body class="bg-gray-100 font-roboto">
+    <!-- Contenedor principal -->
+    <div class="flex flex-col min-h-screen">
+        <!-- Contenido principal -->
+        <div class="flex flex-1">
+            <!-- Sidebar -->
+            <aside class="hidden lg:block w-1/4 bg-red-700 text-white flex flex-col items-center py-8">
+                <img src="../img/guevara2.png" alt="Logo del Colegio" class="w-32 h-32 mb-4 rounded-full">
+                <h2 class="text-2xl font-semibold mb-6">Departamento de Alumnado</h2>
+                <nav class="w-full">
+                    <ul class="space-y-2">
+                        <li>
+                            <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none tab-button" onclick="mostrarSeccion('alumnos')">
+                                <i class="bi bi-people-fill mr-2"></i> Alumnos
+                            </button>
+                        </li>
+                        <li>
+                            <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none tab-button" onclick="mostrarSeccion('materias')">
+                                <i class="bi bi-journal-bookmark-fill mr-2"></i> Materias
+                            </button>
+                        </li>
+                        <li>
+                            <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none tab-button" onclick="mostrarSeccion('insertarNotas')">
+                                <i class="bi bi-pencil-square mr-2"></i> Insertar Notas
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+            <!-- Sección principal -->
+            <div class="w-full lg:w-3/4">
+                <!-- Header móvil -->
+                <header class="bg-red-700 text-white lg:hidden">
+                    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-bold">Departamento de Alumnado</h1>
+                        </div>
+                        <button id="menuButton" class="focus:outline-none">
+                            <i class="bi bi-list text-2xl"></i>
+                        </button>
+                    </div>
+                    <!-- Menú móvil -->
+                    <nav id="mobileMenu" class="hidden">
+                        <ul>
+                            <li>
+                                <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('alumnos')">
+                                    <i class="bi bi-people-fill mr-2"></i> Alumnos
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('materias')">
+                                    <i class="bi bi-journal-bookmark-fill mr-2"></i> Materias
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('insertarNotas')">
+                                    <i class="bi bi-pencil-square mr-2"></i> Insertar Notas
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
+                <!-- Contenido -->
+                <main class="container mx-auto px-4 py-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-red-700">Bienvenido, <%= user.apellido_nombre %></h1>
+                    </div>
+                    <!-- Sección Alumnos -->
+                    <div id="alumnos" class="seccion">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="bi bi-people-fill mr-2"></i>Lista de Alumnos</h2>
+                        <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
+                            <table id="alumnosTable" class="min-w-full">
+                                <thead class="bg-red-700 text-white">
+                                    <tr>
+                                        <th class="px-4 py-2 border-b">ID</th>
+                                        <th class="px-4 py-2 border-b">Nombre</th>
+                                        <th class="px-4 py-2 border-b">Curso</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (alumnos && alumnos.length > 0) { %>
+                                        <% alumnos.forEach(function(alumno) { %>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="px-4 py-2 border-b text-center"><%= alumno.id_alumno %></td>
+                                            <td class="px-4 py-2 border-b"><%= alumno.apellido_nombre %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= alumno.nombre_curso %></td>
+                                        </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 border-b text-center">No hay alumnos registrados.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Sección Materias -->
+                    <div id="materias" class="seccion" style="display: none;">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="bi bi-journal-bookmark-fill mr-2"></i>Lista de Materias</h2>
+                        <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
+                            <table id="materiasTable" class="min-w-full">
+                                <thead class="bg-red-700 text-white">
+                                    <tr>
+                                        <th class="px-4 py-2 border-b">ID</th>
+                                        <th class="px-4 py-2 border-b">Nombre de Materia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (materias && materias.length > 0) { %>
+                                        <% materias.forEach(function(materia) { %>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="px-4 py-2 border-b text-center"><%= materia.id_materias %></td>
+                                            <td class="px-4 py-2 border-b"><%= materia.nombre_materias %></td>
+                                        </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="2" class="px-4 py-2 border-b text-center">No hay materias registradas.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="insertarNotas" class="seccion" style="display: none;">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="bi bi-pencil-square mr-2"></i>Insertar Notas</h2>
+                        <form action="/insertarNotas" method="POST" id="formInsertarNotas">
+                            <!-- Selector de Alumno -->
+                            <div class="mb-4">
+                                <label for="id_alumno" class="block text-gray-700">Seleccionar Alumno:</label>
+                                <select id="id_alumno" name="id_alumno" class="w-full px-4 py-2 border rounded" required>
+                                    <option value="" disabled selected>Seleccione un alumno</option>
+                                    <% alumnos.forEach(function(alumno) { %>
+                                        <option value="<%= alumno.id_alumno %>"><%= alumno.apellido_nombre %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                            
+                            <!-- Selector de Materia -->
+                            <div class="mb-4">
+                                <label for="id_materia" class="block text-gray-700">Seleccionar Materia:</label>
+                                <select id="id_materia" name="id_materias[]" class="w-full px-4 py-2 border rounded">
+                                    <option value="" disabled selected>Seleccione una materia</option>
+                                    <% materias.forEach(function(materia) { %>
+                                        <option value="<%= materia.id_materias %>"><%= materia.nombre_materias %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                    
+                            <!-- Campos de Notas -->
+                            <div class="bg-white shadow rounded-lg p-4 mb-4">
+                                <h3 class="text-lg font-semibold mb-2 text-red-700">Cargar Notas para la Materia Seleccionada</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe1 C1</label>
+                                        <input type="number" name="informe1_cuatrimestre1[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe2 C1</label>
+                                        <input type="number" name="informe2_cuatrimestre1[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota C1</label>
+                                        <input type="number" name="nota_cuatrimestre1[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe1 C2</label>
+                                        <input type="number" name="informe1_cuatrimestre2[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe2 C2</label>
+                                        <input type="number" name="informe2_cuatrimestre2[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota C2</label>
+                                        <input type="number" name="nota_cuatrimestre2[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota Anual</label>
+                                        <input type="number" name="nota_anual[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota Diciembre</label>
+                                        <input type="number" name="nota_dic[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota Febrero</label>
+                                        <input type="number" name="nota_feb[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota Final</label>
+                                        <input type="number" name="nota_final[]" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Botón de Envío -->
+                            <button type="submit" class="mt-6 px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800">
+                                Insertar Notas
+                            </button>
+                        </form>
+                    </div>   
+                    <div id="editarNotas" class="seccion" style="display: none;">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="bi bi-pencil-square mr-2"></i>Editar Notas</h2>
+                        <form action="/editarNotas" method="POST" id="formEditarNotas">
+                            <!-- Selector de Alumno -->
+                            <div class="mb-4">
+                                <label for="id_alumno" class="block text-gray-700">Seleccionar Alumno:</label>
+                                <select id="id_alumno_editar" name="id_alumno" class="w-full px-4 py-2 border rounded" required>
+                                    <option value="" disabled selected>Seleccione un alumno</option>
+                                    <% alumnos.forEach(function(alumno) { %>
+                                        <option value="<%= alumno.id_alumno %>"><%= alumno.apellido_nombre %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                    
+                            <!-- Selector de Materia -->
+                            <div class="mb-4">
+                                <label for="id_materia_editar" class="block text-gray-700">Seleccionar Materia:</label>
+                                <select id="id_materia_editar" name="id_materia" class="w-full px-4 py-2 border rounded" required>
+                                    <option value="" disabled selected>Seleccione una materia</option>
+                                    <% materias.forEach(function(materia) { %>
+                                        <option value="<%= materia.id_materias %>"><%= materia.nombre_materias %></option>
+                                    <% }); %>
+                                </select>
+                            </div>
+                    
+                            <!-- Botón para cargar notas existentes -->
+                            <button type="button" id="cargarNotas" class="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                Cargar Notas
+                            </button>
+                    
+                            <!-- Campos para editar notas -->
+                            <div id="notasFormulario" class="hidden bg-white shadow rounded-lg p-4 mb-4">
+                                <h3 class="text-lg font-semibold mb-2 text-red-700">Editar Notas para la Materia Seleccionada</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe1 C1</label>
+                                        <input type="number" name="informe1_cuatrimestre1" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe2 C1</label>
+                                        <input type="number" name="informe2_cuatrimestre1" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota C1</label>
+                                        <input type="number" name="nota_cuatrimestre1" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe1 C2</label>
+                                        <input type="number" name="informe1_cuatrimestre2" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Informe2 C2</label>
+                                        <input type="number" name="informe2_cuatrimestre2" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota C2</label>
+                                        <input type="number" name="nota_cuatrimestre2" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota Anual</label>
+                                        <input type="number" name="nota_anual" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 mb-1">Nota Final</label>
+                                        <input type="number" name="nota_final" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Botón para guardar cambios -->
+                            <button type="submit" class="mt-6 px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800 hidden" id="guardarNotas">
+                                Guardar Cambios
+                            </button>
+                        </form>
+                    </div>                
+                </main>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-4">
+            <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
+                <div class="flex items-center mb-4 lg:mb-0">
+                    <img src="../img/empresa.png" alt="Brain Tech Logo" class="w-10 h-10 mr-2">
+                    <span>Desarrollado por Brain Tech SAS</span>
+                </div>
+                <div class="text-sm">
+                    &copy; Todos los derechos reservados.
+                </div>
+            </div>
+        </footer>
+        <!-- Scripts -->
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <!-- Bootstrap Icons -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.js"></script>
+        <!-- Inicialización de DataTables -->
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Inicialización de DataTables
+                $('#alumnosTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json'
+                    },
+                    paging: false,
+                    info: false,
+                    searching: false
+                });
+                $('#materiasTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json'
+                    },
+                    paging: false,
+                    info: false,
+                    searching: false
+                });
+
+                // Función para mostrar la sección seleccionada
+                function mostrarSeccion(seccion) {
+                    // Ocultar todas las secciones
+                    $('.seccion').hide();
+                    // Mostrar la sección seleccionada
+                    $('#' + seccion).show();
+                    // Remover la clase 'bg-red-600' de todos los botones
+                    $('.tab-button').removeClass('bg-red-600');
+                    // Agregar la clase 'bg-red-600' al botón seleccionado
+                    $(`[onclick="mostrarSeccion('${seccion}')"]`).addClass('bg-red-600');
+                }
+
+                // Hacer la función disponible globalmente
+                window.mostrarSeccion = mostrarSeccion;
+
+                // Función para mostrar/ocultar el menú móvil
+                document.getElementById('menuButton').addEventListener('click', function() {
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Manejar el envío del formulario de notas
+                const form = document.getElementById('insertarNotasForm');
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+                    const formData = new FormData(form);
+
+                    // Enviar la solicitud AJAX
+                    fetch('/insertarNotas', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); // Parsear la respuesta JSON
+                        } else {
+                            throw new Error('Error en la respuesta del servidor.');
+                        }
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Mostrar SweetAlert de éxito
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Registro exitoso',
+                                text: data.message,
+                            });
+                            // Opcionalmente, reiniciar el formulario
+                            form.reset();
+                        } else {
+                            // Mostrar SweetAlert de error
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message || 'Ocurrió un error al registrar las notas.',
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error en la solicitud.',
+                        });
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

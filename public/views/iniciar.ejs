@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Colegio Provincial Dr. Ernesto Guevara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-[sans-serif] bg-gray-900 md:h-screen">
+    <div class="grid md:grid-cols-2 items-center gap-8 h-full">
+        <!-- Sección izquierda con imagen -->
+        <div class="max-md:order-1 p-4">
+            <img src="./img/guevara2.png" class="lg:max-w-[80%] w-full h-full object-contain block mx-auto" alt="Imagen del colegio" />
+        </div>
+
+        <!-- Sección derecha con el formulario -->
+        <div class="flex items-center md:p-8 p-6 bg-white md:rounded-tl-[55px] md:rounded-bl-[55px] h-full">
+            <form class="max-w-lg w-full mx-auto" action="/codlogin" method="post">
+                <div class="mb-12">
+                    <h3 class="text-gray-800 text-4xl font-extrabold">Iniciar Sesión</h3>
+                    <p class="text-gray-800 text-sm mt-4">
+                        ¿No tienes una cuenta? 
+                        <a href="./registro.ejs" class="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Regístrate aquí</a>
+                    </p>
+                </div>
+
+                <div>
+                    <label class="text-gray-800 text-xs block mb-2">Usuario</label>
+                    <div class="relative flex items-center">
+                        <input name="apellido_nombre" type="text" required class="w-full text-sm border-b border-gray-300 focus:border-gray-800 px-2 py-3 outline-none" placeholder="Ingresa tu usuario" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute right-2" viewBox="0 0 512 512">
+                            <path d="M256 288c-35.346 0-64-28.654-64-64s28.654-64 64-64 64 28.654 64 64-28.654 64-64 64zm0-144c-44.183 0-80 35.817-80 80s35.817 80 80 80 80-35.817 80-80-35.817-80-80-80z" />
+                            <path d="M256 312c-54.86 0-105.635 21.438-144 60.36C76.647 401.115 64 426.61 64 454c0 10.69 8.6 18.55 19.23 18.55h345.54C439.4 472.55 448 464.69 448 454c0-27.39-12.647-52.885-48-81.64-38.365-38.922-89.14-60.36-144-60.36zm182.77 124.55H74.23c2.342-18.057 13.448-41.827 50.607-75.46C164.276 333.017 208.77 312 256 312c47.23 0 91.724 21.017 131.163 49.09 37.159 33.633 48.265 57.403 50.607 75.46z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <label class="text-gray-800 text-xs block mb-2">Contraseña</label>
+                    <div class="relative flex items-center">
+                        <input name="password" type="password" required class="w-full text-sm border-b border-gray-300 focus:border-gray-800 px-2 py-3 outline-none" placeholder="Ingresa tu contraseña" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute right-2 cursor-pointer" viewBox="0 0 128 128">
+                            <path d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <button type="submit" class="w-full py-3 px-6 text-sm font-semibold tracking-wider rounded-full text-white bg-gray-800 hover:bg-gray-700 focus:outline-none">
+                        Iniciar Sesión
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

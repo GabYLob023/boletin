@@ -1,0 +1,103 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e8ecf1;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+header {
+    background-color: red;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+}
+nav a {
+    color: #ffffff;
+    margin-left: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s, transform 0.2s;
+}
+nav a:hover {
+    color: #f39c12;
+    transform: scale(1.05);
+}
+.main-container {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+.welcome-section {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+.welcome-section h2 {
+    font-size: 2.5rem;
+     color: #1e3c58;
+    margin-bottom: 20px;
+}
+.welcome-section p {
+    font-size: 1.2rem;
+    color: #6c7a89;
+}
+.combined-section {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    max-width: 800px;
+    width: 100%;
+}
+.info-section, .latest-news {
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 15px;
+    flex: 1;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+.info-section h3, .latest-news h3 {
+    font-size: 2rem;
+    color: #1e3c58;
+    margin-bottom: 20px;
+}
+.info-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+.info-section ul li {
+    padding: 15px 0;
+    border-bottom: 1px solid #ecf0f1;
+    font-size: 1.2rem;
+    color: #34495e;
+}
+.latest-news input {
+    display: block;
+    width: calc(100% - 24px);
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #bdc3c7;
+    border-radius: 10px;
+    font-size: 1.1rem;
+}
+footer {
+    text-align: center;
+    padding: 30px;
+    background-color: red;
+    color: white;
+    margin-top: 40px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}

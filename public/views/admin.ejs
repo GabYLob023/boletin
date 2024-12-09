@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="/estilos/admin.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-roboto">
+    <!-- Contenedor principal -->
+    <div class="flex flex-col min-h-screen">
+        <!-- Contenido principal -->
+        <div class="flex flex-1">
+            <!-- Sidebar -->
+            <aside class="hidden lg:block w-1/4 bg-red-700 text-white flex flex-col items-center py-8">
+                <img src="../img/guevara2.png" alt="Logo del Colegio" class="w-32 h-32 mb-4 rounded-full">
+                <h2 class="text-2xl font-semibold mb-6">Panel de Administración</h2>
+                <nav class="w-full">
+                    <ul class="space-y-2">
+                        <li>
+                            <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('alumnos')">
+                                <i class="fas fa-users mr-2"></i> Alumnos
+                            </button>
+                        </li>
+                        <li>
+                            <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('materias')">
+                                <i class="fas fa-book mr-2"></i> Materias
+                            </button>
+                        </li>
+                        <li>
+                            <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('alumnado')">
+                                <i class="fas fa-user-tie mr-2"></i> Alumnado
+                            </button>
+                        </li>
+                        <!-- Nuevo botón para acceder al registro de Alumnado -->
+                        <li>
+                            <a href="/registro2.ejs" class="block text-left px-6 py-2 hover:bg-red-600 focus:outline-none">
+                                <i class="fas fa-user-plus mr-2"></i> Registrar Alumnado
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+            </aside>
+            <!-- Sección principal -->
+            <div class="w-full lg:w-3/4">
+                <!-- Header móvil -->
+                <header class="bg-red-700 text-white lg:hidden">
+                    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-bold">Panel de Administración</h1>
+                        </div>
+                        <button id="menuButton" class="focus:outline-none">
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
+                    </div>
+                    <!-- Menú móvil -->
+                    <nav id="mobileMenu" class="hidden">
+                        <ul>
+                            <li>
+                                <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('alumnos')">
+                                    <i class="fas fa-users mr-2"></i> Alumnos
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('materias')">
+                                    <i class="fas fa-book mr-2"></i> Materias
+                                </button>
+                            </li>
+                            <li>
+                                <button class="w-full text-left px-6 py-2 hover:bg-red-600 focus:outline-none" onclick="mostrarSeccion('alumnado')">
+                                    <i class="fas fa-user-tie mr-2"></i> Alumnado
+                                </button>
+                            </li>
+                            <!-- Nuevo botón en menú móvil -->
+                            <li>
+                                <a href="/registro2.ejs" class="block text-left px-6 py-2 hover:bg-red-600 focus:outline-none">
+                                    <i class="fas fa-user-plus mr-2"></i> Registrar Alumnado
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </header>
+                <!-- Contenido -->
+                <main class="container mx-auto px-4 py-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-red-700">Bienvenido, <%= user.apellido_nombre %></h1>
+                    </div>
+                    <!-- Sección Alumnos -->
+                    <div id="alumnos" class="seccion">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="fas fa-users mr-2"></i>Lista de Alumnos</h2>
+                        <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
+                            <table id="alumnosTable" class="min-w-full">
+                                <thead class="bg-red-700 text-white">
+                                    <tr>
+                                        <th class="px-4 py-2 border-b">ID</th>
+                                        <th class="px-4 py-2 border-b">Nombre</th>
+                                        <th class="px-4 py-2 border-b">Curso</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (alumnos && alumnos.length > 0) { %>
+                                        <% alumnos.forEach(function(alumno) { %>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="px-4 py-2 border-b text-center"><%= alumno.id_alumno %></td>
+                                            <td class="px-4 py-2 border-b"><%= alumno.apellido_nombre %></td>
+                                            <td class="px-4 py-2 border-b text-center"><%= alumno.nombre_curso %></td>
+                                        </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 border-b text-center">No hay alumnos registrados.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Sección Materias -->
+                    <div id="materias" class="seccion" style="display: none;">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="fas fa-book mr-2"></i>Lista de Materias</h2>
+                        <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
+                            <table id="materiasTable" class="min-w-full">
+                                <thead class="bg-red-700 text-white">
+                                    <tr>
+                                        <th class="px-4 py-2 border-b">ID</th>
+                                        <th class="px-4 py-2 border-b">Nombre de Materia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (materias && materias.length > 0) { %>
+                                        <% materias.forEach(function(materia) { %>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="px-4 py-2 border-b text-center"><%= materia.id_materias %></td>
+                                            <td class="px-4 py-2 border-b"><%= materia.nombre_materias %></td>
+                                        </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="2" class="px-4 py-2 border-b text-center">No hay materias registradas.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Sección Alumnado -->
+                    <div id="alumnado" class="seccion" style="display: none;">
+                        <h2 class="text-xl font-semibold mb-4 text-red-700"><i class="fas fa-user-tie mr-2"></i>Lista de Alumnado</h2>
+                        <div class="overflow-x-auto bg-white shadow rounded-lg p-4">
+                            <table id="alumnadoTable" class="min-w-full">
+                                <thead class="bg-red-700 text-white">
+                                    <tr>
+                                        <th class="px-4 py-2 border-b">ID</th>
+                                        <th class="px-4 py-2 border-b">Nombre</th>
+                                        <th class="px-4 py-2 border-b">Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (alumnado && alumnado.length > 0) { %>
+                                        <% alumnado.forEach(function(personal) { %>
+                                        <tr class="hover:bg-gray-100">
+                                            <td class="px-4 py-2 border-b text-center"><%= personal.id_alumnado %></td>
+                                            <td class="px-4 py-2 border-b"><%= personal.apellido_nombre %></td>
+                                            <td class="px-4 py-2 border-b"><%= personal.email %></td>
+                                        </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3" class="px-4 py-2 border-b text-center">No hay personal de alumnado registrado.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-4">
+            <div class="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-between">
+                <div class="flex items-center mb-4 lg:mb-0">
+                    <img src="../img/empresa.png" alt="Brain Tech Logo" class="w-10 h-10 mr-2">
+                    <span>Desarrollado por Brain Tech SAS</span>
+                </div>
+                <div class="text-sm">
+                    &copy; Todos los derechos reservados.
+                </div>
+            </div>
+        </footer>
+        <!-- Scripts -->
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- DataTables JS -->
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <!-- Font Awesome -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <!-- Inicialización de DataTables -->
+        <script>
+            $(document).ready(function() {
+                $('#alumnosTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json'
+                    },
+                    paging: false,
+                    info: false,
+                    searching: false
+                });
+                $('#materiasTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json'
+                    },
+                    paging: false,
+                    info: false,
+                    searching: false
+                });
+                $('#alumnadoTable').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/Spanish.json'
+                    },
+                    paging: false,
+                    info: false,
+                    searching: false
+                });
+            });
+            // Función para mostrar la sección seleccionada
+            function mostrarSeccion(seccion) {
+                // Ocultar todas las secciones
+                $('.seccion').hide();
+                // Mostrar la sección seleccionada
+                $('#' + seccion).show();
+                // Remover la clase 'bg-red-600' de todos los botones
+                $('.tab-button').removeClass('bg-red-600');
+                // Agregar la clase 'bg-red-600' al botón seleccionado
+                // event.target.classList.add('bg-red-600');
+            }
+            // Función para mostrar/ocultar el menú móvil
+            document.getElementById('menuButton').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                mobileMenu.classList.toggle('hidden');
+            });
+        </script>
+    </body>
+</html>
